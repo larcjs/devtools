@@ -21,10 +21,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/larcjs/larc-devtools.git"
+    "url": "https://github.com/larcjs/devtools.git"
   },
   "bugs": {
-    "url": "https://github.com/larcjs/larc-devtools/issues"
+    "url": "https://github.com/larcjs/devtools/issues"
   },
-  "homepage": "https://github.com/larcjs/larc-devtools#readme"
+  "homepage": "https://github.com/larcjs/devtools#readme"
 }
