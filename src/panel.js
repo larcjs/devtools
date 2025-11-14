@@ -352,13 +352,17 @@
 
   // Load components from page
   function loadComponents() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_COMPONENTS' }, (response) => {
-          if (response && Array.isArray(response)) {
-            renderComponents(response);
-          }
-        });
+    // Use the inspected tab ID, not the active tab
+    chrome.tabs.sendMessage(tabId, { type: 'GET_COMPONENTS' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('[PAN DevTools] Failed to get components:', chrome.runtime.lastError);
+        renderComponents([]);
+        return;
+      }
+      if (response && Array.isArray(response)) {
+        renderComponents(response);
+      } else {
+        renderComponents([]);
       }
     });
   }
