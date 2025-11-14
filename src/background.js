@@ -9,17 +9,29 @@ const connections = new Map();
 // Listen for connections from DevTools panels
 chrome.runtime.onConnect.addListener(function(port) {
   if (port.name === 'devtools-panel') {
-    const tabId = port.sender.tab?.id;
+    // DevTools panels need to send their inspected tab ID via message
+    port.onMessage.addListener((message) => {
+      if (message.type === 'INIT' && message.tabId) {
+        const tabId = message.tabId;
 
-    // Store connection
-    connections.set(tabId, port);
+        // Store connection with inspected tab ID
+        connections.set(tabId, port);
+
+        console.log('[PAN DevTools] Panel connected for tab', tabId);
+      }
+    });
 
     // Clean up on disconnect
     port.onDisconnect.addListener(() => {
-      connections.delete(tabId);
+      // Find and remove this port from connections
+      for (const [tabId, p] of connections.entries()) {
+        if (p === port) {
+          connections.delete(tabId);
+          console.log('[PAN DevTools] Panel disconnected for tab', tabId);
+          break;
+        }
+      }
     });
-
-    console.log('[PAN DevTools] Panel connected for tab', tabId);
   }
 });
 

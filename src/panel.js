@@ -43,8 +43,15 @@
     fileInput: document.getElementById('file-input')
   };
 
-  // Connect to background script
+  // Connect to background script and send inspected tab ID
+  const tabId = chrome.devtools.inspectedWindow.tabId;
   const port = chrome.runtime.connect({ name: 'devtools-panel' });
+
+  // Send tab ID immediately after connecting
+  port.postMessage({
+    type: 'INIT',
+    tabId: tabId
+  });
 
   // Listen for messages from background
   port.onMessage.addListener((message) => {

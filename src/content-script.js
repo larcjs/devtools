@@ -22,10 +22,13 @@
     // Only handle PAN messages
     if (event.data && event.data.type === 'PAN_MESSAGE') {
       // Forward to DevTools panel via background script
+      // Note: Don't include tabId - background.js gets it from sender.tab.id
       chrome.runtime.sendMessage({
         type: 'PAN_MESSAGE',
-        data: event.data.data,
-        tabId: chrome.devtools?.inspectedWindow?.tabId
+        data: event.data.data
+      }).catch(err => {
+        // Extension might not be ready, ignore
+        console.debug('[PAN DevTools] Failed to send message:', err);
       });
     }
   });
