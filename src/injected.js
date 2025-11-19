@@ -108,5 +108,44 @@
     }
   };
 
+  // Listen for requests from content script
+  window.addEventListener('message', function(event) {
+    // Only accept messages from same window
+    if (event.source !== window) return;
+
+    const { type } = event.data || {};
+
+    if (type === 'PAN_GET_COMPONENTS') {
+      const components = getComponents();
+      window.postMessage({
+        type: 'PAN_COMPONENTS_RESPONSE',
+        data: components
+      }, '*');
+    }
+
+    if (type === 'PAN_GET_HISTORY') {
+      window.postMessage({
+        type: 'PAN_HISTORY_RESPONSE',
+        data: messageHistory
+      }, '*');
+    }
+
+    if (type === 'PAN_CLEAR_HISTORY') {
+      messageHistory.length = 0;
+    }
+
+    if (type === 'PAN_REPLAY_MESSAGE') {
+      const msg = messageHistory.find(m => m.id === event.data.messageId);
+      if (msg) {
+        const customEvent = new CustomEvent(msg.type, {
+          detail: msg.detail,
+          bubbles: true,
+          composed: true
+        });
+        document.dispatchEvent(customEvent);
+      }
+    }
+  });
+
   console.log('[PAN DevTools] Injected and monitoring PAN messages');
 })();

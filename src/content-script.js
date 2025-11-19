@@ -36,33 +36,45 @@
   // Listen for requests from DevTools panel
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'GET_HISTORY') {
-      // Get history from injected script
+      // Request history from injected script via postMessage
       window.postMessage({ type: 'PAN_GET_HISTORY' }, '*');
 
-      // Set up listener for response
+      // Set up one-time listener for response
       const listener = (event) => {
-        if (event.data && event.data.type === 'PAN_HISTORY_RESPONSE') {
+        if (event.source === window && event.data?.type === 'PAN_HISTORY_RESPONSE') {
           window.removeEventListener('message', listener);
           sendResponse(event.data.data);
         }
       };
       window.addEventListener('message', listener);
+
+      // Timeout after 1 second
+      setTimeout(() => {
+        window.removeEventListener('message', listener);
+        sendResponse([]);
+      }, 1000);
 
       return true; // Async response
     }
 
     if (message.type === 'GET_COMPONENTS') {
-      // Get components from injected script
+      // Request components from injected script via postMessage
       window.postMessage({ type: 'PAN_GET_COMPONENTS' }, '*');
 
-      // Set up listener for response
+      // Set up one-time listener for response
       const listener = (event) => {
-        if (event.data && event.data.type === 'PAN_COMPONENTS_RESPONSE') {
+        if (event.source === window && event.data?.type === 'PAN_COMPONENTS_RESPONSE') {
           window.removeEventListener('message', listener);
           sendResponse(event.data.data);
         }
       };
       window.addEventListener('message', listener);
+
+      // Timeout after 1 second
+      setTimeout(() => {
+        window.removeEventListener('message', listener);
+        sendResponse([]);
+      }, 1000);
 
       return true; // Async response
     }
@@ -78,37 +90,6 @@
         messageId: message.messageId
       }, '*');
       sendResponse({ success: true });
-    }
-  });
-
-  // Enhanced injected script with response handlers
-  window.addEventListener('message', function(event) {
-    if (event.source !== window) return;
-
-    const { type } = event.data || {};
-
-    if (type === 'PAN_GET_HISTORY') {
-      const history = window.__panDevTools?.getHistory() || [];
-      window.postMessage({
-        type: 'PAN_HISTORY_RESPONSE',
-        data: history
-      }, '*');
-    }
-
-    if (type === 'PAN_GET_COMPONENTS') {
-      const components = window.__panDevTools?.getComponents() || [];
-      window.postMessage({
-        type: 'PAN_COMPONENTS_RESPONSE',
-        data: components
-      }, '*');
-    }
-
-    if (type === 'PAN_CLEAR_HISTORY') {
-      window.__panDevTools?.clearHistory();
-    }
-
-    if (type === 'PAN_REPLAY_MESSAGE') {
-      window.__panDevTools?.replay(event.data.messageId);
     }
   });
 
