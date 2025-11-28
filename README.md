@@ -44,7 +44,8 @@ Professional debugging and inspection tool for Page Area Network (PAN) message b
 
 1. **Clone the repository:**
    ```bash
-   cd /Users/cdr/Projects/pan
+   git clone https://github.com/larcjs/devtools.git
+   cd devtools
    ```
 
 2. **Open Chrome Extensions:**
@@ -393,10 +394,9 @@ Inspired by:
 
 ## Support
 
-- 📖 [Documentation](../docs/)
-- 🐛 [Report Issue](https://github.com/youruser/pan/issues)
-- 💬 [Discussions](https://github.com/youruser/pan/discussions)
-- 📧 [Email](mailto:support@pan.dev)
+- 📖 [Documentation](https://larcjs.github.io/site/)
+- 🐛 [Report Issue](https://github.com/larcjs/devtools/issues)
+- 💬 [Discussions](https://github.com/larcjs/devtools/discussions)
 
 ---
 

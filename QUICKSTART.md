@@ -9,7 +9,7 @@
 
 ### Step 2: Load the Extension
 1. Click **"Load unpacked"** button
-2. Navigate to `/Users/cdr/Projects/pan/devtools-extension/`
+2. Navigate to the `devtools/` directory of your LARC installation
 3. Click **"Select"**
 
 ### Step 3: Verify
@@ -25,7 +25,7 @@
 
 ### Step 1: Open a PAN Example
 ```bash
-cd /Users/cdr/Projects/pan
+# Open any example with PAN components
 open examples/02-todos-and-inspector.html
 ```
 
@@ -188,10 +188,9 @@ Click "Resume"
 
 ## Getting Help
 
-- 📖 Full README: `devtools-extension/README.md`
-- 🐛 Issues: GitHub
-- 💬 Discussions: GitHub
-- 📧 Email: support@pan.dev
+- 📖 Full README: [README.md](README.md)
+- 🐛 Issues: [GitHub Issues](https://github.com/larcjs/devtools/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/larcjs/devtools/discussions)
 
 ---
 
