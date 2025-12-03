@@ -20,6 +20,8 @@
   EventTarget.prototype.dispatchEvent = function(event) {
     // Check if this is a PAN event
     if (event instanceof CustomEvent && event.type && event.type.startsWith('pan:')) {
+      console.log('[PAN DevTools] Intercepted event:', event.type, event.detail);
+
       const message = {
         type: event.type,
         detail: event.detail,
@@ -33,6 +35,8 @@
       if (messageHistory.length > maxHistory) {
         messageHistory.shift();
       }
+
+      console.log('[PAN DevTools] Posting message to content script:', message);
 
       // Send to content script
       window.postMessage({
